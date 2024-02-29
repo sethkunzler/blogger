@@ -12,8 +12,13 @@
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto">
         <li>
-          <router-link :to="{ name: 'About' }" class="btn text-success lighten-30 selectable text-uppercase">
+          <router-link :to="{ name: 'About' }" class="btn mx-2 text-warning lighten-30 selectable text-uppercase">
             About
+          </router-link>
+        </li>
+        <li>
+          <router-link :to="{ name: 'Profile' }" class="btn mx-2 text-warning lighten-30 selectable text-uppercase">
+            Profile
           </router-link>
         </li>
       </ul>
@@ -64,7 +69,7 @@ a:hover {
 }
 
 .navbar-nav .router-link-exact-active {
-  border-bottom: 2px solid var(--bs-success);
+  border-bottom: 2px solid var(--bs-warning);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }

@@ -1,43 +1,72 @@
 <template>
-  <div class="home flex-grow-1 d-flex flex-column align-items-center justify-content-center">
-    <div class="home-card p-5 card align-items-center shadow rounded elevation-3">
-      <img src="https://bcw.blob.core.windows.net/public/img/8600856373152463" alt="CodeWorks Logo"
-        class="rounded-circle">
-      <h1 class="my-5 bg-dark text-white p-3 rounded text-center">
-        Vue 3 Starter
-      </h1>
-    </div>
+  <div class="container">
+    <section class="row">
+      <div class="col-12">
+        <h1>Blogs</h1>
+      </div>
+    </section>
+    <section v-for="blog in blogs" :key="blogs.id" class="row rounded bg-light blog-post m-3 shadow">
+      <div class="col-md-6">
+        <div class="card-body">
+          <div>
+            <h6>{{ blog.creator.name }}</h6>
+            <img class="creator-picture" :src="blog.creator.picture" :alt="blog.creator.name">
+          </div>
+          <div>
+            <h5 class="card-title">{{ blog.title }}</h5>
+            <p class="card-text">{{ blog.body }}</p>
+            <p class="card-text"><small class="text-body-secondary">{{ blog.createdAt.toLocaleDateString() + '  ' + blog.createdAt.toLocaleTimeString() }}</small></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 text-center p-2">
+        <img :src="blog.imgUrl" class="img-fluid rounded blog-img" :alt="blog.title">
+      </div>
+    </section>
   </div>
 </template>
 
+
 <script>
+import { computed, onMounted } from "vue"
+import { blogsService } from '../services/BlogsService.js'
+import Pop from "../utils/Pop.js"
+import { logger } from "../utils/Logger.js"
+import { AppState } from "../AppState.js"
+
 export default {
-  setup() {
-    return {
-      
+setup(){
+  async function getBlogs() {
+    try {
+      await blogsService.getBlogs()
+    } catch (error) {
+      Pop.error(error)
     }
   }
+  onMounted(() => {
+    logger.log('on mounted works') 
+    getBlogs()
+  })
+return{
+  blogs: computed(() => AppState.blogs)
+}
+}
 }
 </script>
 
-<style scoped lang="scss">
-.home {
-  display: grid;
-  height: 80vh;
-  place-content: center;
-  text-align: center;
-  user-select: none;
 
-  .home-card {
-    width: clamp(500px, 50vw, 100%);
+<style lang="scss" scoped>
+.blog-post {
+  border: 2px solid black;
+}
+.creator-picture {
+  height: 8vh;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  object-fit: cover;
+}
 
-    >img {
-      height: 200px;
-      max-width: 200px;
-      width: 100%;
-      object-fit: contain;
-      object-position: center;
-    }
-  }
+.blog-img {
+  height: 40vh;
 }
 </style>
